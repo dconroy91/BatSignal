@@ -10,8 +10,9 @@ namespace CapstoneBatSignal.Models
     public class ApplicationUser : IdentityUser
     {
         
-        public int CohortId { get; set; }
+        public int? CohortId { get; set; }
 
+       
         public  Cohort Cohort { get; set; }
 
         
