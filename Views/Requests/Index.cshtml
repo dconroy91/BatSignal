@@ -1,71 +1,91 @@
-﻿@model IEnumerable<CapstoneBatSignal.Models.Requests>
+﻿@using Microsoft.AspNetCore.Identity
+@using CapstoneBatSignal.Models;
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@model IEnumerable<CapstoneBatSignal.Models.Requests>
 
 @{
     ViewData["Title"] = "Index";
 }
+@if (UserManager.GetUserAsync(User).Result.IsInstructor == false)
+    //View data
+{
+    <h1>Index</h1>
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StudentUser)
+                Student Name
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InstructorUser)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateCreated)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateFinished)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsConfirmed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsTutoring)
-            </th>
+
+
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.StudentUser.Id)
+                @Html.DisplayFor(modelItem => item.StudentUser.FirstName) @Html.DisplayFor(modelItem => item.StudentUser.LastName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InstructorUser.Id)
-            </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateCreated)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateFinished)
+
+            @if (UserManager.GetUserAsync(User).Result.IsInstructor == true)
+            {
+        <td>
+            
+            <div class=" form-group">
+                
+
+                  
+                      <a asp-controller="Requests" asp-action="Delete" asp-route-id="@item.Id"  > 
+                       <button type="button" class="btn btn-primary">Completed</button>
+                    </a>
+                    <span asp-validation-for="@item.IsConfirmed" class="text-danger"></span>
+                
+            </div>
+            
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsConfirmed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsTutoring)
-            </td>
-            <td>
+            }
+
+            @*put in a tags to send to controller*@
+
+
+
+
+<td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>|*@
+                
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
+
+
+
+
